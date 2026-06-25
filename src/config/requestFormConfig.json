@@ -1,0 +1,146 @@
+{
+  "title": "Request Details",
+  "sections": [
+    {
+      "title": "General Information",
+      "columns": 2,
+      "fields": [
+        {
+          "name": "title",
+          "label": "Request Title",
+          "type": "text",
+          "placeholder": "Enter request title",
+          "validations": {
+            "required": { "value": true, "message": "Title is required" },
+            "minLength": { "value": 3, "message": "Minimum 3 characters" },
+            "maxLength": { "value": 100, "message": "Maximum 100 characters" },
+            "pattern": { "value": "^[A-Za-z0-9\\s\\-]+$", "message": "Only letters, numbers, spaces and hyphens allowed" }
+          }
+        },
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "select",
+          "optionsEndpoint": "/api/options/requestStatuses",
+          "placeholder": "Select status",
+          "validations": {
+            "required": { "value": true, "message": "Status is required" }
+          }
+        },
+        {
+          "name": "priority",
+          "label": "Priority",
+          "type": "select",
+          "optionsEndpoint": "/api/options/priorities",
+          "placeholder": "Select priority",
+          "validations": {
+            "required": { "value": true, "message": "Priority is required" }
+          }
+        },
+        {
+          "name": "assignee",
+          "label": "Assignee",
+          "type": "select",
+          "optionsEndpoint": "/api/options/users",
+          "placeholder": "Select assignee"
+        },
+        {
+          "name": "email",
+          "label": "Contact Email",
+          "type": "text",
+          "placeholder": "user@example.com",
+          "validations": {
+            "required": { "value": true, "message": "Email is required" },
+            "pattern": { "value": "^[\\w.\\-]+@[\\w.\\-]+\\.[a-zA-Z]{2,}$", "message": "Enter a valid email address" }
+          }
+        },
+        {
+          "name": "phone",
+          "label": "Contact Phone",
+          "type": "text",
+          "placeholder": "(555) 123-4567",
+          "validations": {
+            "pattern": { "value": "^\\(?\\d{3}\\)?[\\s\\-]?\\d{3}[\\s\\-]?\\d{4}$", "message": "Enter a valid phone number, e.g. (555) 123-4567" }
+          }
+        },
+        {
+          "name": "createdDate",
+          "label": "Created Date",
+          "type": "date",
+          "validations": {
+            "required": { "value": true, "message": "Created date is required" }
+          }
+        },
+        {
+          "name": "description",
+          "label": "Description",
+          "type": "textarea",
+          "placeholder": "Describe the request",
+          "validations": {
+            "maxLength": { "value": 500, "message": "Maximum 500 characters" }
+          }
+        }
+      ]
+    },
+    {
+      "title": "High Priority Approval",
+      "columns": 1,
+      "fields": [
+        {
+          "name": "approvalType",
+          "label": "Approval Type",
+          "type": "radio",
+          "options": [
+            { "label": "Standard Approval", "value": "standard" },
+            { "label": "Expedited Approval", "value": "expedited" },
+            { "label": "Emergency Approval", "value": "emergency" }
+          ],
+          "visibleWhen": { "field": "priority", "equals": "high" },
+          "validations": {
+            "required": { "value": true, "message": "Approval type is required for high priority requests" }
+          }
+        },
+        {
+          "name": "approvalJustification",
+          "label": "Justification",
+          "type": "textarea",
+          "placeholder": "Provide justification for high priority",
+          "visibleWhen": { "field": "priority", "equals": "high" },
+          "validations": {
+            "required": { "value": true, "message": "Justification is required for high priority requests" },
+            "minLength": { "value": 10, "message": "Justification must be at least 10 characters" },
+            "maxLength": { "value": 500, "message": "Maximum 500 characters" }
+          }
+        },
+        {
+          "name": "approvers",
+          "label": "Approvers",
+          "type": "multiselect",
+          "optionsEndpoint": "/api/options/users",
+          "placeholder": "Select an approver",
+          "visibleWhen": { "field": "priority", "equals": "high" },
+          "validations": {
+            "required": { "value": true, "message": "At least one approver is required" },
+            "minItems": { "value": 1, "message": "At least one approver must be selected" }
+          }
+        }
+      ]
+    }
+  ],
+  "submitValidations": [
+    {
+      "type": "conditionalRequired",
+      "if": { "field": "priority", "equals": "critical" },
+      "then": { "field": "assignee", "required": true },
+      "message": "Assignee is required for critical priority requests"
+    },
+    {
+      "type": "conditionalRequired",
+      "if": { "field": "priority", "equals": "high" },
+      "then": { "field": "approvers", "required": true },
+      "message": "At least one approver is required for high priority requests"
+    }
+  ],
+  "submitButton": { "label": "Submit Request" },
+  "cancelButton": { "label": "Cancel" }
+}

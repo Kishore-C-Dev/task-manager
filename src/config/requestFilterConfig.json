@@ -1,0 +1,33 @@
+{
+  "filters": [
+    {
+      "name": "status",
+      "label": "Status",
+      "type": "select",
+      "placeholder": "All Statuses",
+      "optionsEndpoint": "/api/options/requestStatuses"
+    },
+    {
+      "name": "priority",
+      "label": "Priority",
+      "type": "select",
+      "placeholder": "All Priorities",
+      "optionsEndpoint": "/api/options/priorities"
+    },
+    {
+      "name": "assignee",
+      "label": "Assignee",
+      "type": "select",
+      "placeholder": "All Assignees",
+      "optionsEndpoint": "/api/options/users"
+    },
+    {
+      "name": "search",
+      "label": "Search",
+      "type": "text",
+      "placeholder": "Search by title..."
+    }
+  ],
+  "applyButtonLabel": "Apply Filters",
+  "resetButtonLabel": "Reset"
+}

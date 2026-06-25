@@ -1,46 +1,124 @@
-# Getting Started with Create React App
+# Task Manager — JSON-Driven Dynamic Forms & Lists
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React + TypeScript application for managing requests and tasks. All forms, tables, filters, validations, labels, and layouts are driven entirely by JSON configuration — zero hardcoded UI text.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Dynamic Forms** — field types, labels, placeholders, validations, and section layouts (1/2/3 column) configured via JSON
+- **Dynamic Tables** — columns, headers, sorting, pagination, and actions from API
+- **Mobile Accordion View** — tables convert to expandable accordion cards on mobile viewports
+- **Filter Widget** — configurable filter dropdowns and search per entity type (replaces search bar)
+- **Conditional Fields** — fields show/hide based on other field values (e.g., approval section appears when priority is "high")
+- **Multi-Select** — add multiple users as approvers with tag-based UI
+- **Regex Validations** — email, phone, alphanumeric patterns defined in JSON
+- **Cross-Field Validations** — conditional required rules at form submission
+- **Responsive Layout** — sidebar collapses to horizontal nav; forms go single-column on mobile
+- **Mock API Server** — Express server with realistic REST endpoints; all calls visible in browser Network/XHR tab
 
-### `npm start`
+## Quick Start
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```bash
+# Install dependencies
+npm install
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+# Start mock API server (port 3002)
+node mock-server.js
 
-### `npm test`
+# In a separate terminal, start React app (port 3001)
+npm start
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Open http://localhost:3001 in your browser.
 
-### `npm run build`
+## Project Structure
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+task-manager/
+├── mock-server.js                      # Express mock API server
+├── src/
+│   ├── config/
+│   │   ├── appConfig.json              # App title, navigation items, page keys
+│   │   ├── requestFormConfig.json      # Request form: fields, validations, columns
+│   │   ├── taskFormConfig.json         # Task form: fields, validations, columns
+│   │   ├── requestFilterConfig.json    # Request list filter widgets
+│   │   └── taskFilterConfig.json       # Task list filter widgets
+│   ├── api/
+│   │   └── mockApi.ts                  # Fetch wrappers for all API calls
+│   ├── components/
+│   │   ├── DynamicForm.tsx             # Renders form from JSON config
+│   │   ├── DynamicField.tsx            # Renders individual field by type
+│   │   ├── DynamicTable.tsx            # Table (desktop) + Accordion (mobile)
+│   │   ├── FilterWidget.tsx            # Filter dropdowns/search from config
+│   │   └── Layout.tsx                  # Sidebar nav from config
+│   ├── pages/
+│   │   ├── EntityListPage.tsx          # Generic list page (requests or tasks)
+│   │   └── EntityFormPage.tsx          # Generic create/edit form page
+│   ├── utils/
+│   │   └── validator.ts               # Field + submit validation engine
+│   ├── types/
+│   │   └── index.ts                   # TypeScript interfaces
+│   ├── App.tsx                         # Routes (dynamic from config)
+│   └── App.css                         # Styles including responsive breakpoints
+└── package.json
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## API Endpoints (Mock Server)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/pageConfig/:entity` | Page config (title, columns, sort, accordion) |
+| GET | `/api/formConfig/:entity` | Form config (sections, fields, validations) |
+| GET | `/api/filterConfig/:entity` | Filter widget config |
+| GET | `/api/options/:key` | Dropdown options (statuses, priorities, users) |
+| GET | `/api/:entity` | List items (supports query param filters) |
+| GET | `/api/:entity/:id` | Get single item |
+| POST | `/api/:entity` | Create item |
+| PUT | `/api/:entity/:id` | Update item |
+| DELETE | `/api/:entity/:id` | Delete item |
 
-### `npm run eject`
+## JSON Configuration
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Form Section Columns
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```json
+{
+  "title": "General Information",
+  "columns": 2,
+  "fields": [...]
+}
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Set `columns` to `1`, `2`, or `3`. On mobile all collapse to single column.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Conditional Field Visibility
 
-## Learn More
+```json
+{
+  "name": "approvers",
+  "type": "multiselect",
+  "visibleWhen": { "field": "priority", "equals": "high" },
+  "validations": {
+    "required": { "value": true, "message": "At least one approver required" }
+  }
+}
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Filter Config
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```json
+{
+  "filters": [
+    { "name": "status", "label": "Status", "type": "select", "optionsEndpoint": "/api/options/statuses" },
+    { "name": "search", "label": "Search", "type": "text", "placeholder": "Search..." }
+  ],
+  "applyButtonLabel": "Apply Filters",
+  "resetButtonLabel": "Reset"
+}
+```
+
+## Tech Stack
+
+- React 18 + TypeScript
+- React Router v7
+- Express (mock API server)
+- Plain CSS (no UI library)

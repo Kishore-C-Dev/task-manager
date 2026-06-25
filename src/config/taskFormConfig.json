@@ -1,0 +1,90 @@
+{
+  "title": "Task Details",
+  "sections": [
+    {
+      "title": "Task Information",
+      "columns": 3,
+      "fields": [
+        {
+          "name": "taskName",
+          "label": "Task Name",
+          "type": "text",
+          "placeholder": "Enter task name",
+          "validations": {
+            "required": { "value": true, "message": "Task name is required" },
+            "minLength": { "value": 3, "message": "Minimum 3 characters" },
+            "maxLength": { "value": 150, "message": "Maximum 150 characters" },
+            "pattern": { "value": "^[A-Za-z0-9\\s\\-\\.]+$", "message": "Only letters, numbers, spaces, hyphens, and dots allowed" }
+          }
+        },
+        {
+          "name": "status",
+          "label": "Status",
+          "type": "select",
+          "optionsEndpoint": "/api/options/taskStatuses",
+          "placeholder": "Select status",
+          "validations": {
+            "required": { "value": true, "message": "Status is required" }
+          }
+        },
+        {
+          "name": "priority",
+          "label": "Priority",
+          "type": "select",
+          "optionsEndpoint": "/api/options/priorities",
+          "placeholder": "Select priority",
+          "validations": {
+            "required": { "value": true, "message": "Priority is required" }
+          }
+        },
+        {
+          "name": "assignee",
+          "label": "Assignee",
+          "type": "select",
+          "optionsEndpoint": "/api/options/users",
+          "placeholder": "Select assignee",
+          "validations": {
+            "required": { "value": true, "message": "Assignee is required" }
+          }
+        },
+        {
+          "name": "dueDate",
+          "label": "Due Date",
+          "type": "date",
+          "validations": {
+            "required": { "value": true, "message": "Due date is required" }
+          }
+        },
+        {
+          "name": "estimatedHours",
+          "label": "Estimated Hours",
+          "type": "number",
+          "placeholder": "Enter estimated hours",
+          "validations": {
+            "min": { "value": 0, "message": "Hours cannot be negative" },
+            "max": { "value": 999, "message": "Maximum 999 hours" }
+          }
+        },
+        {
+          "name": "description",
+          "label": "Description",
+          "type": "textarea",
+          "placeholder": "Describe the task",
+          "validations": {
+            "maxLength": { "value": 1000, "message": "Maximum 1000 characters" }
+          }
+        }
+      ]
+    }
+  ],
+  "submitValidations": [
+    {
+      "type": "conditionalRequired",
+      "if": { "field": "priority", "equals": "critical" },
+      "then": { "field": "estimatedHours", "required": true },
+      "message": "Estimated hours required for critical tasks"
+    }
+  ],
+  "submitButton": { "label": "Submit Task" },
+  "cancelButton": { "label": "Cancel" }
+}
