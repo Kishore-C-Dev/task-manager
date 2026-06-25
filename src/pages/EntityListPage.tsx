@@ -2,8 +2,9 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PageConfig, FilterConfig, EntityRecord } from '../types';
 import { fetchList, deleteItem, fetchPageConfig, fetchFilterConfig } from '../api/mockApi';
-import DynamicTable from '../components/DynamicTable';
+import PageHeader from '../components/PageHeader';
 import FilterWidget from '../components/FilterWidget';
+import DynamicTable from '../components/DynamicTable';
 
 interface Props {
   entityKey: string;
@@ -55,12 +56,11 @@ const EntityListPage: React.FC<Props> = ({ entityKey }) => {
 
   return (
     <div className="list-page">
-      <div className="page-header">
-        <h2 className="page-title">{pageConfig.title}</h2>
-        <button className="btn btn-primary" onClick={() => navigate(`/${entityKey}/new`)}>
-          {pageConfig.createButtonLabel}
-        </button>
-      </div>
+      <PageHeader
+        title={pageConfig.title}
+        actionLabel={pageConfig.createButtonLabel}
+        onAction={() => navigate(`/${entityKey}/new`)}
+      />
       {filterConfig && (
         <FilterWidget config={filterConfig} onApply={loadData} />
       )}

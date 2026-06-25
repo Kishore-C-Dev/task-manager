@@ -44,60 +44,8 @@ const optionsData = {
 };
 
 const pageConfigData = {
-  requests: {
-    title: 'Requests',
-    createButtonLabel: 'New Request',
-    table: {
-      columns: [
-        { key: 'id', header: 'ID', width: '80px', sortable: true },
-        { key: 'title', header: 'Title', sortable: true },
-        { key: 'status', header: 'Status', sortable: true },
-        { key: 'priority', header: 'Priority', sortable: true },
-        { key: 'createdDate', header: 'Created', type: 'date', sortable: true },
-        { key: 'assignee', header: 'Assignee', sortable: true },
-      ],
-      actions: [
-        { key: 'edit', label: 'Edit' },
-        { key: 'delete', label: 'Delete', confirm: 'Are you sure you want to delete this request?' },
-      ],
-      emptyMessage: 'No requests found.',
-      pageSize: 10,
-      defaultSortColumn: 'createdDate',
-      defaultSortDirection: 'desc',
-      mobileAccordion: {
-        titleKey: 'title',
-        subtitleKey: 'status',
-      },
-    },
-    dataEndpoint: '/api/requests',
-  },
-  tasks: {
-    title: 'Tasks',
-    createButtonLabel: 'New Task',
-    table: {
-      columns: [
-        { key: 'id', header: 'ID', width: '80px', sortable: true },
-        { key: 'taskName', header: 'Task Name', sortable: true },
-        { key: 'status', header: 'Status', sortable: true },
-        { key: 'priority', header: 'Priority', sortable: true },
-        { key: 'dueDate', header: 'Due Date', type: 'date', sortable: true },
-        { key: 'assignee', header: 'Assignee', sortable: true },
-      ],
-      actions: [
-        { key: 'edit', label: 'Edit' },
-        { key: 'delete', label: 'Delete', confirm: 'Are you sure you want to delete this task?' },
-      ],
-      emptyMessage: 'No tasks found.',
-      pageSize: 10,
-      defaultSortColumn: 'dueDate',
-      defaultSortDirection: 'asc',
-      mobileAccordion: {
-        titleKey: 'taskName',
-        subtitleKey: 'status',
-      },
-    },
-    dataEndpoint: '/api/tasks',
-  },
+  requests: require('./src/config/requestPageConfig.json'),
+  tasks: require('./src/config/taskPageConfig.json'),
 };
 
 const formConfigData = {
