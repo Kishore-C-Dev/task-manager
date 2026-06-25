@@ -417,6 +417,62 @@ body {
   margin-top: 6px;
 }
 
+.questionnaire-section {
+  margin-top: 24px;
+}
+
+.questionnaire-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2d3436;
+  margin-bottom: 12px;
+}
+
+.form-accordion {
+  border: 1px solid #dfe6e9;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.form-accordion-error {
+  border-color: #d63031;
+}
+
+.form-accordion-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  background: #f8f9fa;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  font-family: inherit;
+  color: #2d3436;
+}
+
+.form-accordion-header:hover {
+  background: #f1f2f6;
+}
+
+.form-accordion-open .form-accordion-header {
+  border-bottom: 1px solid #dfe6e9;
+}
+
+.form-accordion-title {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.form-accordion-body {
+  padding: 20px;
+}
+
 @media (max-width: 768px) {
   .app-layout {
     flex-direction: column;

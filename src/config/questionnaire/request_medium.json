@@ -1,0 +1,82 @@
+{
+  "sections": [
+    {
+      "title": "Impact Assessment",
+      "columns": 2,
+      "fields": [
+        {
+          "name": "q_business_impact",
+          "label": "Which business area is affected?",
+          "type": "select",
+          "options": [
+            { "label": "Operations", "value": "operations" },
+            { "label": "Finance", "value": "finance" },
+            { "label": "Customer Service", "value": "customer_service" },
+            { "label": "Engineering", "value": "engineering" },
+            { "label": "Multiple Areas", "value": "multiple" }
+          ],
+          "placeholder": "Select business area",
+          "validations": {
+            "required": { "value": true, "message": "Please select a business area" }
+          }
+        },
+        {
+          "name": "q_users_affected",
+          "label": "Estimated number of users affected",
+          "type": "number",
+          "placeholder": "Enter number",
+          "validations": {
+            "required": { "value": true, "message": "Please enter number of users" },
+            "min": { "value": 1, "message": "Must be at least 1" }
+          }
+        },
+        {
+          "name": "q_impact_description",
+          "label": "Describe the impact if this request is delayed",
+          "type": "textarea",
+          "placeholder": "Explain the consequences of delay...",
+          "validations": {
+            "required": { "value": true, "message": "Impact description is required" },
+            "minLength": { "value": 20, "message": "Please provide at least 20 characters" }
+          }
+        }
+      ]
+    },
+    {
+      "title": "Resource & Timeline",
+      "columns": 2,
+      "fields": [
+        {
+          "name": "q_budget_available",
+          "label": "Is budget allocated for this request?",
+          "type": "radio",
+          "options": [
+            { "label": "Yes, budget is approved", "value": "yes" },
+            { "label": "Pending approval", "value": "pending" },
+            { "label": "No budget allocated", "value": "no" }
+          ],
+          "validations": {
+            "required": { "value": true, "message": "Please select budget status" }
+          }
+        },
+        {
+          "name": "q_deadline",
+          "label": "Required completion date",
+          "type": "date",
+          "validations": {
+            "required": { "value": true, "message": "Please select a deadline" }
+          }
+        },
+        {
+          "name": "q_dependencies",
+          "label": "Are there any dependencies or blockers?",
+          "type": "textarea",
+          "placeholder": "List any dependencies...",
+          "validations": {
+            "maxLength": { "value": 500, "message": "Maximum 500 characters" }
+          }
+        }
+      ]
+    }
+  ]
+}

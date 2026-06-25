@@ -1,0 +1,107 @@
+{
+  "sections": [
+    {
+      "title": "Business Justification",
+      "columns": 1,
+      "fields": [
+        {
+          "name": "q_business_case",
+          "label": "Provide the business case for high priority",
+          "type": "textarea",
+          "placeholder": "Explain why this requires high priority...",
+          "validations": {
+            "required": { "value": true, "message": "Business case is required" },
+            "minLength": { "value": 30, "message": "Please provide at least 30 characters" }
+          }
+        },
+        {
+          "name": "q_revenue_impact",
+          "label": "Is there a revenue impact?",
+          "type": "radio",
+          "options": [
+            { "label": "Direct revenue loss", "value": "direct" },
+            { "label": "Indirect revenue impact", "value": "indirect" },
+            { "label": "No revenue impact", "value": "none" }
+          ],
+          "validations": {
+            "required": { "value": true, "message": "Please select revenue impact" }
+          }
+        },
+        {
+          "name": "q_estimated_value",
+          "label": "Estimated business value ($)",
+          "type": "number",
+          "placeholder": "Enter dollar amount",
+          "validations": {
+            "min": { "value": 0, "message": "Value cannot be negative" }
+          }
+        }
+      ]
+    },
+    {
+      "title": "Risk Assessment",
+      "columns": 2,
+      "fields": [
+        {
+          "name": "q_risk_level",
+          "label": "What is the risk level if not addressed?",
+          "type": "select",
+          "options": [
+            { "label": "Low - Minor inconvenience", "value": "low" },
+            { "label": "Medium - Workaround exists", "value": "medium" },
+            { "label": "High - Significant disruption", "value": "high" },
+            { "label": "Critical - System failure", "value": "critical" }
+          ],
+          "placeholder": "Select risk level",
+          "validations": {
+            "required": { "value": true, "message": "Risk level is required" }
+          }
+        },
+        {
+          "name": "q_mitigation",
+          "label": "Current mitigation or workaround",
+          "type": "textarea",
+          "placeholder": "Describe any existing workarounds...",
+          "validations": {
+            "required": { "value": true, "message": "Please describe current mitigation" }
+          }
+        }
+      ]
+    },
+    {
+      "title": "Stakeholder & Escalation",
+      "columns": 2,
+      "fields": [
+        {
+          "name": "q_sponsor",
+          "label": "Executive sponsor",
+          "type": "text",
+          "placeholder": "Enter sponsor name",
+          "validations": {
+            "required": { "value": true, "message": "Executive sponsor is required" },
+            "pattern": { "value": "^[A-Za-z\\s]+$", "message": "Only letters and spaces allowed" }
+          }
+        },
+        {
+          "name": "q_escalation_contact",
+          "label": "Escalation contact email",
+          "type": "text",
+          "placeholder": "contact@example.com",
+          "validations": {
+            "required": { "value": true, "message": "Escalation contact is required" },
+            "pattern": { "value": "^[\\w.\\-]+@[\\w.\\-]+\\.[a-zA-Z]{2,}$", "message": "Enter a valid email" }
+          }
+        },
+        {
+          "name": "q_stakeholder_notes",
+          "label": "Additional stakeholder notes",
+          "type": "textarea",
+          "placeholder": "Any notes for stakeholders...",
+          "validations": {
+            "maxLength": { "value": 500, "message": "Maximum 500 characters" }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,21 +1,27 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { FormConfig, FieldConfig, VisibleWhen } from '../types';
+import { FormConfig, FormSection, FieldConfig, VisibleWhen } from '../types';
 import { validateField, runSubmitValidations } from '../utils/validator';
+import { fetchQuestionnaire } from '../api/mockApi';
 import DynamicField from './DynamicField';
+import FormAccordion from './FormAccordion';
 
 interface Props {
   config: FormConfig;
+  entityKey: string;
   initialData?: Record<string, any>;
   onSubmit: (data: Record<string, any>) => void;
   onCancel: () => void;
 }
 
-const DynamicForm: React.FC<Props> = ({ config, initialData, onSubmit, onCancel }) => {
+const DynamicForm: React.FC<Props> = ({ config, entityKey, initialData, onSubmit, onCancel }) => {
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [questionnaireSections, setQuestionnaireSections] = useState<FormSection[]>([]);
 
   const allFields: FieldConfig[] = config.sections.flatMap((s) => s.fields);
+  const questionnaireFields: FieldConfig[] = questionnaireSections.flatMap((s) => s.fields);
+  const combinedFields = [...allFields, ...questionnaireFields];
 
   useEffect(() => {
     const defaults: Record<string, any> = {};
@@ -31,6 +37,32 @@ const DynamicForm: React.FC<Props> = ({ config, initialData, onSubmit, onCancel 
     setFormData(defaults);
   }, [config, initialData]);
 
+  useEffect(() => {
+    const priority = formData.priority;
+    if (!priority) {
+      setQuestionnaireSections([]);
+      return;
+    }
+    fetchQuestionnaire(entityKey, priority).then((data) => {
+      if (data && data.sections) {
+        setQuestionnaireSections(data.sections);
+        setFormData((prev) => {
+          const updated = { ...prev };
+          data.sections.forEach((section: FormSection) => {
+            section.fields.forEach((field: FieldConfig) => {
+              if (!(field.name in updated)) {
+                updated[field.name] = field.type === 'multiselect' ? [] : (field.defaultValue ?? '');
+              }
+            });
+          });
+          return updated;
+        });
+      } else {
+        setQuestionnaireSections([]);
+      }
+    });
+  }, [formData.priority, entityKey]);
+
   const isFieldVisible = useCallback((condition: VisibleWhen | undefined, data: Record<string, any>): boolean => {
     if (!condition) return true;
     const currentVal = String(data[condition.field] || '');
@@ -39,14 +71,14 @@ const DynamicForm: React.FC<Props> = ({ config, initialData, onSubmit, onCancel 
   }, []);
 
   const getVisibleFields = useCallback((): FieldConfig[] => {
-    return allFields.filter((f) => isFieldVisible(f.visibleWhen, formData));
-  }, [allFields, formData, isFieldVisible]);
+    return combinedFields.filter((f) => isFieldVisible(f.visibleWhen, formData));
+  }, [combinedFields, formData, isFieldVisible]);
 
   const handleChange = (name: string, value: any) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
     setTouched((prev) => ({ ...prev, [name]: true }));
 
-    const field = allFields.find((f) => f.name === name);
+    const field = combinedFields.find((f) => f.name === name);
     if (field && isFieldVisible(field.visibleWhen, { ...formData, [name]: value })) {
       const err = validateField(field, value);
       setErrors((prev) => {
@@ -110,6 +142,23 @@ const DynamicForm: React.FC<Props> = ({ config, initialData, onSubmit, onCancel 
           </fieldset>
         );
       })}
+
+      {questionnaireSections.length > 0 && (
+        <div className="questionnaire-section">
+          <h3 className="questionnaire-title">Priority Questionnaire</h3>
+          {questionnaireSections.map((section, si) => (
+            <FormAccordion
+              key={`q-${si}`}
+              section={section}
+              formData={formData}
+              errors={errors}
+              touched={touched}
+              onChange={handleChange}
+            />
+          ))}
+        </div>
+      )}
+
       <div className="form-actions">
         <button type="submit" className="btn btn-primary">{config.submitButton.label}</button>
         <button type="button" className="btn btn-secondary" onClick={onCancel}>{config.cancelButton.label}</button>

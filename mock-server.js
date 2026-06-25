@@ -58,6 +58,15 @@ const filterConfigData = {
   tasks: require('./src/config/taskFilterConfig.json'),
 };
 
+const questionnaireData = {
+  requests: {
+    low: require('./src/config/questionnaire/request_low.json'),
+    medium: require('./src/config/questionnaire/request_medium.json'),
+    high: require('./src/config/questionnaire/request_high.json'),
+    critical: require('./src/config/questionnaire/request_critical.json'),
+  },
+};
+
 const dataStores = {
   requests: [
     { id: 'REQ-001', title: 'Update user authentication', status: 'open', priority: 'high', createdDate: '2026-06-20', assignee: 'alice', email: 'alice@example.com', phone: '(555) 111-2222', description: 'Upgrade auth module to support MFA' },
@@ -98,6 +107,14 @@ app.get('/api/formConfig/:entity', (req, res) => {
 
 app.get('/api/filterConfig/:entity', (req, res) => {
   const data = filterConfigData[req.params.entity];
+  if (!data) return res.status(404).json({ error: 'Not found' });
+  sendDelayed(res, data);
+});
+
+app.get('/api/questionnaire/:entity/:priority', (req, res) => {
+  const entityQ = questionnaireData[req.params.entity];
+  if (!entityQ) return res.status(404).json({ error: 'Not found' });
+  const data = entityQ[req.params.priority];
   if (!data) return res.status(404).json({ error: 'Not found' });
   sendDelayed(res, data);
 });

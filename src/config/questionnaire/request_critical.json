@@ -1,0 +1,192 @@
+{
+  "sections": [
+    {
+      "title": "Critical Incident Details",
+      "columns": 2,
+      "fields": [
+        {
+          "name": "q_incident_type",
+          "label": "Type of critical incident",
+          "type": "select",
+          "options": [
+            { "label": "System Outage", "value": "outage" },
+            { "label": "Security Breach", "value": "security" },
+            { "label": "Data Loss", "value": "data_loss" },
+            { "label": "Compliance Violation", "value": "compliance" },
+            { "label": "Customer-Facing Failure", "value": "customer" },
+            { "label": "Other Critical", "value": "other" }
+          ],
+          "placeholder": "Select incident type",
+          "validations": {
+            "required": { "value": true, "message": "Incident type is required" }
+          }
+        },
+        {
+          "name": "q_incident_start",
+          "label": "When did the incident start?",
+          "type": "date",
+          "validations": {
+            "required": { "value": true, "message": "Incident start date is required" }
+          }
+        },
+        {
+          "name": "q_systems_affected",
+          "label": "Which systems are affected?",
+          "type": "textarea",
+          "placeholder": "List all affected systems...",
+          "validations": {
+            "required": { "value": true, "message": "Affected systems must be listed" },
+            "minLength": { "value": 10, "message": "Please provide at least 10 characters" }
+          }
+        }
+      ]
+    },
+    {
+      "title": "Business Impact Analysis",
+      "columns": 2,
+      "fields": [
+        {
+          "name": "q_customers_impacted",
+          "label": "Number of customers impacted",
+          "type": "number",
+          "placeholder": "Enter number",
+          "validations": {
+            "required": { "value": true, "message": "Customer count is required" },
+            "min": { "value": 0, "message": "Cannot be negative" }
+          }
+        },
+        {
+          "name": "q_revenue_loss_per_hour",
+          "label": "Estimated revenue loss per hour ($)",
+          "type": "number",
+          "placeholder": "Enter dollar amount",
+          "validations": {
+            "required": { "value": true, "message": "Revenue loss estimate is required" },
+            "min": { "value": 0, "message": "Cannot be negative" }
+          }
+        },
+        {
+          "name": "q_sla_breach",
+          "label": "Is this an SLA breach?",
+          "type": "radio",
+          "options": [
+            { "label": "Yes - SLA already breached", "value": "breached" },
+            { "label": "At risk - breach imminent", "value": "at_risk" },
+            { "label": "No SLA impact", "value": "no" }
+          ],
+          "validations": {
+            "required": { "value": true, "message": "SLA status is required" }
+          }
+        },
+        {
+          "name": "q_regulatory_impact",
+          "label": "Any regulatory or compliance implications?",
+          "type": "textarea",
+          "placeholder": "Describe regulatory concerns if any...",
+          "validations": {
+            "required": { "value": true, "message": "Regulatory impact assessment is required" }
+          }
+        }
+      ]
+    },
+    {
+      "title": "Escalation & Response Team",
+      "columns": 2,
+      "fields": [
+        {
+          "name": "q_executive_sponsor",
+          "label": "Executive sponsor (VP or above)",
+          "type": "text",
+          "placeholder": "Enter name",
+          "validations": {
+            "required": { "value": true, "message": "Executive sponsor is required" },
+            "pattern": { "value": "^[A-Za-z\\s]+$", "message": "Only letters and spaces allowed" }
+          }
+        },
+        {
+          "name": "q_incident_commander",
+          "label": "Incident commander",
+          "type": "text",
+          "placeholder": "Enter name",
+          "validations": {
+            "required": { "value": true, "message": "Incident commander is required" },
+            "pattern": { "value": "^[A-Za-z\\s]+$", "message": "Only letters and spaces allowed" }
+          }
+        },
+        {
+          "name": "q_war_room_link",
+          "label": "War room / bridge call link",
+          "type": "text",
+          "placeholder": "https://...",
+          "validations": {
+            "required": { "value": true, "message": "War room link is required" },
+            "pattern": { "value": "^https?://.*", "message": "Must be a valid URL starting with http:// or https://" }
+          }
+        },
+        {
+          "name": "q_communication_plan",
+          "label": "Communication plan for stakeholders",
+          "type": "textarea",
+          "placeholder": "Outline how stakeholders will be notified...",
+          "validations": {
+            "required": { "value": true, "message": "Communication plan is required" },
+            "minLength": { "value": 20, "message": "Please provide at least 20 characters" }
+          }
+        }
+      ]
+    },
+    {
+      "title": "Recovery & Resolution Plan",
+      "columns": 1,
+      "fields": [
+        {
+          "name": "q_root_cause",
+          "label": "Preliminary root cause (if known)",
+          "type": "textarea",
+          "placeholder": "Describe the suspected root cause...",
+          "validations": {
+            "required": { "value": true, "message": "Root cause assessment is required" }
+          }
+        },
+        {
+          "name": "q_resolution_plan",
+          "label": "Proposed resolution plan",
+          "type": "textarea",
+          "placeholder": "Step-by-step plan to resolve...",
+          "validations": {
+            "required": { "value": true, "message": "Resolution plan is required" },
+            "minLength": { "value": 30, "message": "Please provide a detailed plan (at least 30 characters)" }
+          }
+        },
+        {
+          "name": "q_estimated_resolution",
+          "label": "Estimated time to resolution",
+          "type": "select",
+          "options": [
+            { "label": "Within 1 hour", "value": "1h" },
+            { "label": "Within 4 hours", "value": "4h" },
+            { "label": "Within 24 hours", "value": "24h" },
+            { "label": "More than 24 hours", "value": "24h_plus" }
+          ],
+          "placeholder": "Select estimated time",
+          "validations": {
+            "required": { "value": true, "message": "Resolution timeline is required" }
+          }
+        },
+        {
+          "name": "q_post_mortem",
+          "label": "Will a post-mortem be conducted?",
+          "type": "radio",
+          "options": [
+            { "label": "Yes - already scheduled", "value": "scheduled" },
+            { "label": "Yes - to be scheduled", "value": "to_schedule" },
+            { "label": "Not applicable", "value": "na" }
+          ],
+          "validations": {
+            "required": { "value": true, "message": "Post-mortem decision is required" }
+          }
+        }
+      ]
+    }
+  ]
+}

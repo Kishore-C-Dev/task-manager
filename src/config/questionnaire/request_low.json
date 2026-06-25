@@ -1,0 +1,46 @@
+{
+  "sections": [
+    {
+      "title": "Basic Assessment",
+      "columns": 1,
+      "fields": [
+        {
+          "name": "q_impact",
+          "label": "What is the expected impact of this request?",
+          "type": "radio",
+          "options": [
+            { "label": "No impact on existing systems", "value": "none" },
+            { "label": "Minor changes to existing workflows", "value": "minor" },
+            { "label": "Moderate adjustments needed", "value": "moderate" }
+          ],
+          "validations": {
+            "required": { "value": true, "message": "Please select an impact level" }
+          }
+        },
+        {
+          "name": "q_timeline",
+          "label": "What is the desired completion timeline?",
+          "type": "select",
+          "options": [
+            { "label": "No rush - whenever possible", "value": "no_rush" },
+            { "label": "Within the next quarter", "value": "quarter" },
+            { "label": "Within the next month", "value": "month" }
+          ],
+          "placeholder": "Select timeline",
+          "validations": {
+            "required": { "value": true, "message": "Please select a timeline" }
+          }
+        },
+        {
+          "name": "q_additional_notes",
+          "label": "Any additional notes?",
+          "type": "textarea",
+          "placeholder": "Optional notes...",
+          "validations": {
+            "maxLength": { "value": 300, "message": "Maximum 300 characters" }
+          }
+        }
+      ]
+    }
+  ]
+}
