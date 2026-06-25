@@ -64,9 +64,16 @@ export interface ButtonConfig {
   label: string;
 }
 
+export interface QuestionnaireConfig {
+  triggerField: string;
+  endpoint: string;
+  title: string;
+}
+
 export interface FormConfig {
   title: string;
   sections: FormSection[];
+  questionnaire?: QuestionnaireConfig;
   submitValidations?: SubmitValidation[];
   submitButton: ButtonConfig;
   cancelButton: ButtonConfig;

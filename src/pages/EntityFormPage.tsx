@@ -49,7 +49,6 @@ const EntityFormPage: React.FC<Props> = ({ entityKey }) => {
     <div className="form-page">
       <DynamicForm
         config={formConfig}
-        entityKey={entityKey}
         initialData={initialData}
         onSubmit={handleSubmit}
         onCancel={() => navigate(`/${entityKey}`)}

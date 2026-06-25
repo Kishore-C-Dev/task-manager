@@ -1,19 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { FormConfig, FormSection, FieldConfig, VisibleWhen } from '../types';
 import { validateField, runSubmitValidations } from '../utils/validator';
-import { fetchQuestionnaire } from '../api/mockApi';
 import DynamicField from './DynamicField';
 import FormAccordion from './FormAccordion';
 
 interface Props {
   config: FormConfig;
-  entityKey: string;
   initialData?: Record<string, any>;
   onSubmit: (data: Record<string, any>) => void;
   onCancel: () => void;
 }
 
-const DynamicForm: React.FC<Props> = ({ config, entityKey, initialData, onSubmit, onCancel }) => {
+const DynamicForm: React.FC<Props> = ({ config, initialData, onSubmit, onCancel }) => {
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -37,31 +35,40 @@ const DynamicForm: React.FC<Props> = ({ config, entityKey, initialData, onSubmit
     setFormData(defaults);
   }, [config, initialData]);
 
+  const qConfig = config.questionnaire;
+  const triggerValue = qConfig ? formData[qConfig.triggerField] : undefined;
+
   useEffect(() => {
-    const priority = formData.priority;
-    if (!priority) {
+    if (!qConfig) {
       setQuestionnaireSections([]);
       return;
     }
-    fetchQuestionnaire(entityKey, priority).then((data) => {
-      if (data && data.sections) {
-        setQuestionnaireSections(data.sections);
-        setFormData((prev) => {
-          const updated = { ...prev };
-          data.sections.forEach((section: FormSection) => {
-            section.fields.forEach((field: FieldConfig) => {
-              if (!(field.name in updated)) {
-                updated[field.name] = field.type === 'multiselect' ? [] : (field.defaultValue ?? '');
-              }
+    if (!triggerValue) {
+      setQuestionnaireSections([]);
+      return;
+    }
+    const url = qConfig.endpoint.replace('{value}', triggerValue);
+    fetch(url)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && data.sections) {
+          setQuestionnaireSections(data.sections);
+          setFormData((prev) => {
+            const updated = { ...prev };
+            data.sections.forEach((section: FormSection) => {
+              section.fields.forEach((field: FieldConfig) => {
+                if (!(field.name in updated)) {
+                  updated[field.name] = field.type === 'multiselect' ? [] : (field.defaultValue ?? '');
+                }
+              });
             });
+            return updated;
           });
-          return updated;
-        });
-      } else {
-        setQuestionnaireSections([]);
-      }
-    });
-  }, [formData.priority, entityKey]);
+        } else {
+          setQuestionnaireSections([]);
+        }
+      });
+  }, [qConfig, triggerValue]);
 
   const isFieldVisible = useCallback((condition: VisibleWhen | undefined, data: Record<string, any>): boolean => {
     if (!condition) return true;
@@ -145,7 +152,7 @@ const DynamicForm: React.FC<Props> = ({ config, entityKey, initialData, onSubmit
 
       {questionnaireSections.length > 0 && (
         <div className="questionnaire-section">
-          <h3 className="questionnaire-title">Priority Questionnaire</h3>
+          <h3 className="questionnaire-title">{qConfig!.title}</h3>
           {questionnaireSections.map((section, si) => (
             <FormAccordion
               key={`q-${si}`}

@@ -61,8 +61,3 @@ export async function fetchFilterConfig(entityKey: string): Promise<any> {
   return res.json();
 }
 
-export async function fetchQuestionnaire(entityKey: string, priority: string): Promise<any> {
-  const res = await fetch(`/api/questionnaire/${entityKey}/${priority}`);
-  if (res.status === 404) return null;
-  return res.json();
-}
