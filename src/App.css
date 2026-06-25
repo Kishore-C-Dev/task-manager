@@ -540,6 +540,34 @@ body {
   }
 }
 
+.field-chunk {
+  margin-top: 16px;
+}
+
+.field-chunk:first-child {
+  margin-top: 0;
+}
+
+.field-group-block {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.field-group-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #636e72;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.field-group-block .fields-grid {
+  margin-top: 0;
+}
+
 .field-group {
   display: flex;
   flex-direction: column;

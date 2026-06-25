@@ -36,6 +36,7 @@ export interface FieldConfig {
   disabled?: boolean;
   visibleWhen?: VisibleWhen;
   fullWidth?: boolean;
+  group?: string;
 }
 
 export interface FormSection {

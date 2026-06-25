@@ -8,7 +8,7 @@
   "sections": [
     {
       "title": "General Information",
-      "columns": 2,
+      "columns": 3,
       "fields": [
         {
           "name": "title",
@@ -74,6 +74,56 @@
           "type": "date",
           "validations": {
             "required": { "value": true, "message": "Created date is required" }
+          }
+        },
+        {
+          "name": "addressLine1",
+          "label": "Address Line 1",
+          "type": "text",
+          "placeholder": "Street address",
+          "group": "Address",
+          "validations": {
+            "required": { "value": true, "message": "Address is required" }
+          }
+        },
+        {
+          "name": "addressLine2",
+          "label": "Address Line 2",
+          "type": "text",
+          "placeholder": "Apt, suite, unit (optional)",
+          "group": "Address"
+        },
+        {
+          "name": "city",
+          "label": "City",
+          "type": "text",
+          "placeholder": "City",
+          "group": "Address",
+          "validations": {
+            "required": { "value": true, "message": "City is required" },
+            "pattern": { "value": "^[A-Za-z\\s]+$", "message": "Only letters and spaces allowed" }
+          }
+        },
+        {
+          "name": "state",
+          "label": "State",
+          "type": "text",
+          "placeholder": "State",
+          "group": "Address",
+          "validations": {
+            "required": { "value": true, "message": "State is required" },
+            "pattern": { "value": "^[A-Za-z\\s]+$", "message": "Only letters and spaces allowed" }
+          }
+        },
+        {
+          "name": "zip",
+          "label": "ZIP Code",
+          "type": "text",
+          "placeholder": "ZIP code",
+          "group": "Address",
+          "validations": {
+            "required": { "value": true, "message": "ZIP code is required" },
+            "pattern": { "value": "^\\d{5}(-\\d{4})?$", "message": "Enter a valid ZIP code (e.g. 45701 or 45701-1234)" }
           }
         },
         {

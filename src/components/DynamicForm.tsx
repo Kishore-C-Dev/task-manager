@@ -132,20 +132,48 @@ const DynamicForm: React.FC<Props> = ({ config, initialData, onSubmit, onCancel 
           isFieldVisible(f.visibleWhen, formData)
         );
         if (visibleSectionFields.length === 0) return null;
+
+        const chunks: { group?: string; fields: typeof visibleSectionFields }[] = [];
+        visibleSectionFields.forEach((field) => {
+          const lastChunk = chunks[chunks.length - 1];
+          if (field.group) {
+            if (lastChunk && lastChunk.group === field.group) {
+              lastChunk.fields.push(field);
+            } else {
+              chunks.push({ group: field.group, fields: [field] });
+            }
+          } else {
+            if (lastChunk && !lastChunk.group) {
+              lastChunk.fields.push(field);
+            } else {
+              chunks.push({ fields: [field] });
+            }
+          }
+        });
+
+        const cols = section.columns || 2;
+
         return (
           <fieldset key={si} className="form-section">
             <legend className="section-title">{section.title}</legend>
-            <div className={`fields-grid fields-grid-${section.columns || 2}`}>
-              {visibleSectionFields.map((field) => (
-                <DynamicField
-                  key={field.name}
-                  field={field}
-                  value={formData[field.name]}
-                  error={touched[field.name] ? errors[field.name] : undefined}
-                  onChange={handleChange}
-                />
-              ))}
-            </div>
+            {chunks.map((chunk, ci) => (
+              <div key={ci} className={`field-chunk ${chunk.group ? 'field-group-block' : ''}`}>
+                {chunk.group && (
+                  <div className="field-group-label">{chunk.group}</div>
+                )}
+                <div className={`fields-grid fields-grid-${cols}`}>
+                  {chunk.fields.map((field) => (
+                    <DynamicField
+                      key={field.name}
+                      field={field}
+                      value={formData[field.name]}
+                      error={touched[field.name] ? errors[field.name] : undefined}
+                      onChange={handleChange}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
           </fieldset>
         );
       })}
